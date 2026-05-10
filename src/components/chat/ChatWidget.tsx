@@ -52,6 +52,7 @@ export default function ChatWidget() {
   const [isTyping, setIsTyping] = useState(false);
   const [sessionId, setSessionId] = useState<string>('');
   const [leadSubmitted, setLeadSubmitted] = useState(false);
+  const [messageCount, setMessageCount] = useState(0);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -68,6 +69,7 @@ export default function ChatWidget() {
     };
 
     setMessages(prev => [...prev, userMessage]);
+    setMessageCount(prev => prev + 1);
     setInput('');
     setIsTyping(true);
 
@@ -93,7 +95,7 @@ export default function ChatWidget() {
         role: 'assistant',
         content: data.message,
         properties: data.properties || [],
-        showLeadForm: data.lead_prompt && !leadSubmitted,
+        showLeadForm: messageCount >= 4 && !leadSubmitted,
       };
 
       setMessages(prev => [...prev, assistantMessage]);
